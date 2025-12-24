@@ -9,16 +9,19 @@ import {
 import { db } from '../db';
 import { generateEmbeddings } from '@/lib/ai/embedding';
 
-export const createResource = async (input: NewResourceParams): Promise<string> => {
+export const createResource = async (
+  input: NewResourceParams & { chunkingStrategy?: '.' | '#' | 'none' }
+): Promise<string> => {
   try {
     const { content } = insertResourceSchema.parse(input);
+    const chunkingStrategy = input.chunkingStrategy || '.';
 
     const [resource] = await db
       .insert(resources)
       .values({ content })
       .returning();
 
-    const embeddingsData = await generateEmbeddings(content);
+    const embeddingsData = await generateEmbeddings(content, chunkingStrategy);
     await db.insert(embeddings).values(
       embeddingsData.map((embedding) => ({
         resourceId: resource.id,
