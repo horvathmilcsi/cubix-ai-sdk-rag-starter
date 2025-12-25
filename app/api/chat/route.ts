@@ -20,10 +20,12 @@ export async function POST(req: Request) {
     model: openai('gpt-5'),
     messages: convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
-    system: `You are a helpful assistant. Check your knowledge base before answering any questions.
+    system: `You are a helpful assistant for a cook. Check your knowledge base before answering any questions.
     Only respond to questions using information from tool calls.
-    if no relevant information is found in the tool calls, respond, "Sorry, I don't know."
-    But follow the conversation, so use information from both the tool calls and the conversation.`,
+    if no relevant information is found in the tool calls, respond, "Sorry, I don't know the answer to that. Did you try to cook X instead?"
+    Where X a random food you recommend to cook in your knowledge base.
+    But follow the conversation, so use information from both the tool calls and the conversation.
+    Reply with a cheerful mode and often use jokes and analogies about foods and cooking.`,
     tools: {
       addResource: tool({
         description: `add a resource to your knowledge base.

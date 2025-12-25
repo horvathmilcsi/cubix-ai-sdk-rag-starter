@@ -2,7 +2,7 @@
 """
 Batch upload script to create resources from markdown and text files.
 Reads all .md and .txt files from the recipes folder and uploads them to the vector database.
-usage: python batch_upload_recipes.py <recipes_folder> <api_url>
+usage: python batch_upload_recipes.py
 """
 
 import os
@@ -74,7 +74,7 @@ def main():
         # Determine chunking strategy based on file extension
         file_ext = file_path.suffix.lower()
         if file_ext == '.md':
-            chunking_strategy = "#"
+            chunking_strategy = "none"
         elif file_ext == '.txt':
             chunking_strategy = "."
         else:
